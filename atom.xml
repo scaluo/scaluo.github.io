@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://scaluo.github.io/atom.xml" rel="self"/>
-  <link href="http://scaluo.github.io/"/>
-  <updated>2015-01-10T20:11:46+08:00</updated>
-  <id>http://scaluo.github.io/</id>
+  <title><![CDATA[Scaluo's Blog]]></title>
+  <link href="http://www.scaluo.com/atom.xml" rel="self"/>
+  <link href="http://www.scaluo.com/"/>
+  <updated>2015-01-10T23:48:20+08:00</updated>
+  <id>http://www.scaluo.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
-    
+    <name><![CDATA[scaluo]]></name>
+    <email><![CDATA[scaluo@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 

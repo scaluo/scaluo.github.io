@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://scaluo.github.io/sitemap.xml 
+Sitemap: http://www.scaluo.com/sitemap.xml 
