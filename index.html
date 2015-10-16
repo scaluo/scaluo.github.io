@@ -9,7 +9,11 @@
   <meta name="author" content="scaluo">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="首先确保安装了mongodb和nodejs 安装Mongoose 1
+$npm install mongoos 连接一个本地mongo数据库，数据库名为test 1
+2
+var mongoose = require('mongoose');
+mongoose.connect('mongodb:// &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +69,158 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/10/17/mongoose-start/">Mongoose快速指南</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-17T00:09:53+08:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>首先确保安装了<a href="http://www.mongodb.org/downloads">mongodb</a>和<a href="http://nodejs.org/">nodejs</a></p>
+
+<p>安装Mongoose</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$npm install mongoos
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>连接一个本地mongo数据库，数据库名为test</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var mongoose = require('mongoose');
+</span><span class='line'>mongoose.connect('mongodb://localhost/test');</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以对连接状态进行捕获并进行相应处理</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var db = mongoose.connection;
+</span><span class='line'>db.on('error', console.error.bind(console, 'connection error:'));
+</span><span class='line'>db.once('open', function (callback) {
+</span><span class='line'>  // yay!
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一旦数据库被连接，我们的回调就被调用</p>
+
+<p>现在定义数据结构</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var kittySchema = mongoose.Schema({
+</span><span class='line'>    name: String
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>定义了数据结构后，编译到我们的model中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var Kitten = mongoose.model('Kitten', kittySchema);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var silence = new Kitten({ name: 'Silence' });
+</span><span class='line'>console.log(silence.name); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>模型中可以定义方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kittySchema.methods.speak = function () {
+</span><span class='line'>  var greeting = this.name
+</span><span class='line'>    ? "Meow name is " + this.name
+</span><span class='line'>    : "I don't have a name";
+</span><span class='line'>  console.log(greeting);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>var Kitten = mongoose.model('Kitten', kittySchema);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>调用方法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var fluffy = new Kitten({ name: 'fluffy' });
+</span><span class='line'>fluffy.speak(); // "Meow name is fluffy"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fluffy.save(function (err, fluffy) {
+</span><span class='line'>  if (err) return console.error(err);
+</span><span class='line'>  fluffy.speak();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查找数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Kitten.find(function (err, kittens) {
+</span><span class='line'>  if (err) return console.error(err);
+</span><span class='line'>  console.log(kittens);
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查找符合条件的数据</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Kitten.find({ name: /^Fluff/ }, callback);</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -76,6 +232,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/10/17/mongoose-start/">Mongoose快速指南</a>
+      </li>
     
   </ul>
 </section>
